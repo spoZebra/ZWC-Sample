@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!--This is an auto generated document. Changes to this document may cause incorrect behavior.--><wap-provisioningdoc>
+  <characteristic type="ProfileInfo">
+    <parm name="created_wizard_version" value="11.0.0"/>
+  </characteristic>
+  <characteristic type="Profile">
+    <parm name="ProfileName" value="ConfigProfile"/>
+    <parm name="ModifiedDate" value="2022-09-22 16:40:04"/>
+    <parm name="TargetSystemVersion" value="10.5"/>
+    <characteristic type="AccessMgr" version="10.4">
+      <parm name="emdk_name" value=""/>
+      <parm name="PermissionAccessAction" value="1"/>
+      <parm name="PermissionAccessPermissionName" value="android.permission.SYSTEM_ALERT_WINDOW"/>
+      <parm name="PermissionAccessPackageName" value="com.zebra.workstationconnect.release"/>
+      <parm name="PermissionAccessSignature" value="MIID6TCCAtGgAwIBAgIJAJqOWgV07V6QMA0GCSqGSIb3DQEBBQUAMIGKMQswCQYDVQQGEwJVUzERMA8GA1UECAwITmV3IFlvcmsxEzARBgNVBAcMCkhvbHRzdmlsbGUxGTAXBgNVBAsMEE1vYmlsZSBDb21wdXRpbmcxGzAZBgNVBAoMElplYnJhIFRlY2hub2xvZ2llczEbMBkGA1UEAwwSQ29tbW9uIEFuZHJvaWQgS2V5MB4XDTE4MTEyOTIwNTU0OVoXDTQ2MDQxNjIwNTU0OVowgYoxCzAJBgNVBAYTAlVTMREwDwYDVQQIDAhOZXcgWW9yazETMBEGA1UEBwwKSG9sdHN2aWxsZTEZMBcGA1UECwwQTW9iaWxlIENvbXB1dGluZzEbMBkGA1UECgwSWmVicmEgVGVjaG5vbG9naWVzMRswGQYDVQQDDBJDb21tb24gQW5kcm9pZCBLZXkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCwA3jRXXIKoF3lU4gBU0XM7LAzAc9pyxHFbqRoy+uGXzIdPGKNQVqyeQKT1gLnQWz7Nz+AiFbB3axfjpGZy8Z5gakp1i8avx+ZwwST++ufEs+jhKF9XJThOSc9MG5Cgk9+ByAZjBLwg0XX+IPqTO+xcxG8BlNIDOd1Ik+99MQezGn8mfS/1MMC1ynZRC+18z9VkD+FZeFYSHU1OoFBMhCjMKYApa08ZuPk/+lQTfDTs+JPxjsBqy906vt+PnDnYIfobjaxeEbaDQvjRLlLKKq1OsvdcmnrKWkW72Dt5XkIcTYHfEs6wfFrMiYhO3/gxhoqBuiHbNyIL9kKTwkMg2wfAgMBAAGjUDBOMB0GA1UdDgQWBBRXkmK7fyfhVMBWOrUJvkSHm9IapDAfBgNVHSMEGDAWgBRXkmK7fyfhVMBWOrUJvkSHm9IapDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQB0BZ1Duu0U59p7U9pkdoS79GxhE8ALnYPkxeVX5ZqOBbS/BWG5t+M2EyfUc2pNKqAqopfnBdyXcxuw0JyQBIYKmDHG+YtxqxdqBcDrfmsxk1gyVLH4mZvhCTpPeUM5LivzFGdaqm4Dm2M5XG1BSDvclrUzoebDhg2VFJfRzYHnhZsBNVlcxQ/m8UUKmGl5sXgIHQCi4o0zrdRcWAnMqtxd0vzdRL2h6MTh56ICiOVG8rASXBdZmN49FjwlYFfQyetwdrrmpYleTWkyQteGCy7r5zMCXcMTRawRp5R6kP/w6FNcw3fpUs8qHlT47lhVNABQA94hkNW50Fv40xuSYOww"/>
+    </characteristic>
+    <characteristic type="DisplayMgr" version="10.5">
+      <parm name="emdk_name" value=""/>
+      <parm name="SecondaryDisplayMode" value="1"/>
+      <parm name="ActivityResizability" value="1"/>
+    </characteristic>
+  </characteristic>
+  <characteristic type="Profile">
+    <parm name="ProfileName" value="RestartProfile"/>
+    <parm name="ModifiedDate" value="2022-09-22 16:47:17"/>
+    <parm name="TargetSystemVersion" value="10.1"/>
+    <characteristic type="PowerMgr" version="10.1">
+      <parm name="emdk_name" value=""/>
+      <parm name="ResetAction" value="4" />
+    </characteristic>
+  </characteristic>
+</wap-provisioningdoc>
