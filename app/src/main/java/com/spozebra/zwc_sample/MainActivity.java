@@ -10,15 +10,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.spozebra.zwc_sample.emdk.EmdkEngine;
 import com.spozebra.zwc_sample.emdk.listeners.IEmdkEngineListener;
@@ -34,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
     private Button zwcInstallButton;
     private Button zwcConfigureButton;
     private ProgressBar progressBar;
+    private TextView textViewStatus;
+
+    ExternalDisplayPresentation externalDisplayPresentation;
 
     private MainActivityViewModel viewModel;
     private EmdkEngine emdkEngine;
@@ -48,41 +49,69 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
         zwcInstallButton = (Button)findViewById(R.id.zwcInstallButton);
         zwcConfigureButton = (Button)findViewById(R.id.zwcConfigureButton);
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        textViewStatus = (TextView)findViewById(R.id.textViewStatus);
 
         initUI();
 
-        IntentFilter dockFilter = new IntentFilter(EXTRA_DOCK_STATE);
-        dockFilter.addAction(ACTION_DOCK_EVENT);
     }
 
     private void initUI(){
         configurationManager = new ConfigurationManager(getApplicationContext());
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
+        // Get notification when cradle is connected
+        IntentFilter dockFilter = new IntentFilter(EXTRA_DOCK_STATE);
+        dockFilter.addAction(ACTION_DOCK_EVENT);
+
+        // TODO FIX RECEIVER
+        registerReceiver(viewModel.getDockStateReceiver(), dockFilter);
+
         progressBar.setVisibility(View.VISIBLE);
-        if(viewModel.isZWCInstalled(getApplicationContext(), false)){
+
+        checkZwcAppAndConfig(false);
+
+        // Init Emdk (static, initialized once).
+        emdkEngine = EmdkEngine.getInstance(getApplicationContext(), this);
+    }
+
+    private void checkZwcAppAndConfig(Boolean forceReload) {
+        boolean isZwcAppInstalled = viewModel.getIsZwcInstalled(getApplicationContext().getPackageManager(), forceReload);
+        if(isZwcAppInstalled){
             zwcCheckIcon.setImageResource(R.drawable.checked);
             zwcInstallButton.setEnabled(false);
-        }
-        if(viewModel.isZWCConfigured(configurationManager)) {
-            configCheckIcon.setImageResource(R.drawable.checked);
-            zwcConfigureButton.setEnabled(false);
-        }
 
-        // Init Emdk
-        emdkEngine = EmdkEngine.getInstance(getApplicationContext(), this);
+            boolean isZwcAppConfigured = viewModel.getIsZwcConfigured(configurationManager);
+            if(isZwcAppConfigured) {
+                configCheckIcon.setImageResource(R.drawable.checked);
+                zwcConfigureButton.setEnabled(false);
+                textViewStatus.setText("Connect your device to a cradle");
+            }
+        }
     }
 
     @Override
     public void onRestart(){
         super.onRestart();
         // Force reload as it might be installed while activity was not in foreground
-        if(viewModel.isZWCInstalled(getApplicationContext(), true)){
-            zwcCheckIcon.setImageResource(R.drawable.checked);
-            zwcInstallButton.setEnabled(false);
-        }
+        checkZwcAppAndConfig(true);
     }
 
+    @Override
+    public void onResume() {
+        if(externalDisplayPresentation != null)
+            externalDisplayPresentation.show();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if(externalDisplayPresentation != null)
+            externalDisplayPresentation.hide();
+        super.onPause();
+    }
+
+    // BUTTONS
+    
     public void onInstallZWCCliecked(View v){
         Intent i = new Intent(android.content.Intent.ACTION_VIEW);
         i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.zebra.workstationconnect.release"));
@@ -99,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
                         // Apply config
                         EMDKResults result = emdkEngine.setProfile("ConfigProfile", null);
                         // Set configured
-                        viewModel.setZWCConfigured(configurationManager);
+                        viewModel.setIsZwcConfigured(configurationManager);
                         // Restart
                         emdkEngine.setProfile("RestartProfile", null);
                     }
@@ -114,8 +143,11 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
         builder.show();
     }
 
+    // EMDK
+
     @Override
     public void emdkInitialized() {
         progressBar.setVisibility(View.GONE);
     }
+
 }
