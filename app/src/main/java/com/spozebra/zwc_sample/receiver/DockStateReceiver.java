@@ -9,10 +9,21 @@ import android.hardware.display.DisplayManager;
 import android.view.Display;
 
 import com.spozebra.zwc_sample.SecondaryDisplayActivity;
+import com.spozebra.zwc_sample.emdk.EmdkEngine;
+import com.spozebra.zwc_sample.emdk.listeners.IEmdkEngineListener;
 
 public class DockStateReceiver extends BroadcastReceiver {
 
-    public DockStateReceiver(){
+    static DockStateReceiver instance;
+
+    private DockStateReceiver(){
+    }
+
+    public static DockStateReceiver getInstance() {
+        if (instance == null) {
+            instance = new DockStateReceiver();
+        }
+        return instance;
     }
 
     @Override
@@ -28,7 +39,7 @@ public class DockStateReceiver extends BroadcastReceiver {
                     ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
 
                     Intent startActivityIntent = new Intent(context, SecondaryDisplayActivity.class);
-                    startActivityIntent.addFlags(startActivityIntent.FLAG_ACTIVITY_MULTIPLE_TASK|startActivityIntent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivityIntent.addFlags(startActivityIntent.FLAG_ACTIVITY_NEW_TASK);
 
                     boolean activityAllowed = activityManager.isActivityStartAllowedOnDisplay(context, display.getDisplayId(), startActivityIntent);
                     if(activityAllowed){
@@ -39,7 +50,7 @@ public class DockStateReceiver extends BroadcastReceiver {
                 }
             }
         } else if (dockState == 0) {
-            // CLose
+            // Nothing to do
         }
     }
 }

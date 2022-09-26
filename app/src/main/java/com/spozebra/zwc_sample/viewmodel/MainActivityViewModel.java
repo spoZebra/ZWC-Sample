@@ -13,7 +13,7 @@ public class MainActivityViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> isConfigured;
     private MutableLiveData<Boolean> isInstalled;
-    private MutableLiveData<DockStateReceiver> dockStateReceiver;
+    private MutableLiveData<Boolean> areBroadcastReceiverRegistered;
 
     public MainActivityViewModel(){
     }
@@ -52,12 +52,15 @@ public class MainActivityViewModel extends ViewModel {
         return isInstalled.getValue();
     }
 
-    public DockStateReceiver getDockStateReceiver() {
-        if(dockStateReceiver == null){
-            dockStateReceiver = new MutableLiveData<DockStateReceiver>();
-            dockStateReceiver.setValue(new DockStateReceiver());
+    public Boolean areBroadcastReceiverRegistered() {
+        if(areBroadcastReceiverRegistered == null){
+            areBroadcastReceiverRegistered = new MutableLiveData<Boolean>();
+            areBroadcastReceiverRegistered.setValue(false);
         }
 
-        return dockStateReceiver.getValue();
+        return areBroadcastReceiverRegistered.getValue();
+    }
+    public void setBroadcastReceiverRegistered() {
+        areBroadcastReceiverRegistered.setValue(true);
     }
 }

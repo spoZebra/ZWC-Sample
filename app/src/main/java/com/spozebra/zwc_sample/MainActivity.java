@@ -5,6 +5,7 @@ import static android.content.Intent.EXTRA_DOCK_STATE;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,13 +21,13 @@ import android.widget.TextView;
 
 import com.spozebra.zwc_sample.emdk.EmdkEngine;
 import com.spozebra.zwc_sample.emdk.listeners.IEmdkEngineListener;
+import com.spozebra.zwc_sample.receiver.DockStateReceiver;
 import com.spozebra.zwc_sample.ssm.ConfigurationManager;
 import com.spozebra.zwc_sample.viewmodel.MainActivityViewModel;
 import com.symbol.emdk.EMDKResults;
 
 public class MainActivity extends AppCompatActivity implements IEmdkEngineListener {
 
-    ConfigurationManager configurationManager;
     private ImageView zwcCheckIcon;
     private ImageView configCheckIcon;
     private Button zwcInstallButton;
@@ -34,8 +35,7 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
     private ProgressBar progressBar;
     private TextView textViewStatus;
 
-    ExternalDisplayPresentation externalDisplayPresentation;
-
+    ConfigurationManager configurationManager;
     private MainActivityViewModel viewModel;
     private EmdkEngine emdkEngine;
 
@@ -59,14 +59,15 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
         configurationManager = new ConfigurationManager(getApplicationContext());
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        // Get notification when cradle is connected
-        IntentFilter dockFilter = new IntentFilter(EXTRA_DOCK_STATE);
-        dockFilter.addAction(ACTION_DOCK_EVENT);
-
-        // TODO FIX RECEIVER
-        registerReceiver(viewModel.getDockStateReceiver(), dockFilter);
-
         progressBar.setVisibility(View.VISIBLE);
+
+        if(!viewModel.areBroadcastReceiverRegistered()){
+            // Add broadcast receiver only once
+            IntentFilter dockFilter = new IntentFilter(EXTRA_DOCK_STATE);
+            dockFilter.addAction(ACTION_DOCK_EVENT);
+            registerReceiver(DockStateReceiver.getInstance(), dockFilter);
+            viewModel.setBroadcastReceiverRegistered();
+        }
 
         checkZwcAppAndConfig(false);
 
@@ -96,21 +97,7 @@ public class MainActivity extends AppCompatActivity implements IEmdkEngineListen
         checkZwcAppAndConfig(true);
     }
 
-    @Override
-    public void onResume() {
-        if(externalDisplayPresentation != null)
-            externalDisplayPresentation.show();
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        if(externalDisplayPresentation != null)
-            externalDisplayPresentation.hide();
-        super.onPause();
-    }
-
-    // BUTTONS
+    // Buttons
     
     public void onInstallZWCCliecked(View v){
         Intent i = new Intent(android.content.Intent.ACTION_VIEW);
