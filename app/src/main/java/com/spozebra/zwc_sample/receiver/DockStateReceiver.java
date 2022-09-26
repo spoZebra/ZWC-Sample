@@ -39,7 +39,7 @@ public class DockStateReceiver extends BroadcastReceiver {
                     ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
 
                     Intent startActivityIntent = new Intent(context, SecondaryDisplayActivity.class);
-                    startActivityIntent.addFlags(startActivityIntent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivityIntent.addFlags(startActivityIntent.FLAG_ACTIVITY_LAUNCH_ADJACENT | startActivityIntent.FLAG_ACTIVITY_MULTIPLE_TASK | startActivityIntent.FLAG_ACTIVITY_NEW_TASK);
 
                     boolean activityAllowed = activityManager.isActivityStartAllowedOnDisplay(context, display.getDisplayId(), startActivityIntent);
                     if(activityAllowed){
