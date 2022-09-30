@@ -14,6 +14,7 @@ public class MainActivityViewModel extends ViewModel {
     private MutableLiveData<Boolean> isConfigured;
     private MutableLiveData<Boolean> isInstalled;
     private MutableLiveData<Boolean> areBroadcastReceiverRegistered;
+    private MutableLiveData<Boolean> presentationModeOn;
 
     public MainActivityViewModel(){
     }
@@ -60,7 +61,20 @@ public class MainActivityViewModel extends ViewModel {
 
         return areBroadcastReceiverRegistered.getValue();
     }
+
     public void setBroadcastReceiverRegistered() {
         areBroadcastReceiverRegistered.setValue(true);
+    }
+
+    public Boolean getPresentationModeOn() {
+        if(presentationModeOn == null){
+            presentationModeOn = new MutableLiveData<Boolean>();
+            presentationModeOn.setValue(true);
+        }
+
+        return presentationModeOn.getValue();
+    }
+    public void setPresentationModeOn() {
+        presentationModeOn.setValue(true);
     }
 }

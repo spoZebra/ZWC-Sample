@@ -9,19 +9,20 @@ import android.hardware.display.DisplayManager;
 import android.view.Display;
 
 import com.spozebra.zwc_sample.SecondaryDisplayActivity;
-import com.spozebra.zwc_sample.emdk.EmdkEngine;
-import com.spozebra.zwc_sample.emdk.listeners.IEmdkEngineListener;
+import com.spozebra.zwc_sample.listeners.IDockStateListener;
 
 public class DockStateReceiver extends BroadcastReceiver {
 
     static DockStateReceiver instance;
+    private IDockStateListener listener;
 
-    private DockStateReceiver(){
+    private DockStateReceiver(IDockStateListener listener){
+        this.listener = listener;
     }
 
-    public static DockStateReceiver getInstance() {
+    public static DockStateReceiver getInstance(IDockStateListener listener) {
         if (instance == null) {
-            instance = new DockStateReceiver();
+            instance = new DockStateReceiver(listener);
         }
         return instance;
     }
@@ -30,27 +31,9 @@ public class DockStateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int dockState = intent.getIntExtra(Intent.EXTRA_DOCK_STATE, Intent.EXTRA_DOCK_STATE_UNDOCKED);
         if (dockState == 1) {
-
-            DisplayManager dm = (DisplayManager)context.getSystemService(Context.DISPLAY_SERVICE);
-            Display[] displays = dm.getDisplays();
-            for (Display display : displays) {
-                String name = display.getName();
-                if (name.startsWith("DisplayLink") || name.startsWith("HDMI Screen")) {
-                    ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-
-                    Intent startActivityIntent = new Intent(context, SecondaryDisplayActivity.class);
-                    startActivityIntent.addFlags(startActivityIntent.FLAG_ACTIVITY_LAUNCH_ADJACENT | startActivityIntent.FLAG_ACTIVITY_MULTIPLE_TASK | startActivityIntent.FLAG_ACTIVITY_NEW_TASK);
-
-                    boolean activityAllowed = activityManager.isActivityStartAllowedOnDisplay(context, display.getDisplayId(), startActivityIntent);
-                    if(activityAllowed){
-                        ActivityOptions options = ActivityOptions.makeBasic();
-                        options.setLaunchDisplayId(display.getDisplayId());
-                        context.startActivity(startActivityIntent, options.toBundle());
-                    }
-                }
-            }
+            listener.cradleConnected();
         } else if (dockState == 0) {
-            // Nothing to do
+            listener.cradleDisonnected();
         }
     }
 }

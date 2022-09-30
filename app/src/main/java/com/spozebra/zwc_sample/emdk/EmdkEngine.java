@@ -3,7 +3,7 @@ package com.spozebra.zwc_sample.emdk;
 import android.content.Context;
 import android.util.Log;
 
-import com.spozebra.zwc_sample.emdk.listeners.IEmdkEngineListener;
+import com.spozebra.zwc_sample.listeners.IEmdkEngineListener;
 import com.symbol.emdk.EMDKManager;
 import com.symbol.emdk.EMDKResults;
 import com.symbol.emdk.ProfileManager;
